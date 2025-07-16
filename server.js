@@ -47,7 +47,7 @@ console.log(code);
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
     });
 
-    // access_token = tokenRes.data.access_token;
+    access_token = tokenRes.data.access_token;
     refresh_token = tokenRes.data.refresh_token;
 
     console.log('✅ Access Token:', access_token);
