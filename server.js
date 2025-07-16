@@ -9,7 +9,7 @@ const PORT = 3000;
 // ✅ Replace these with your real Zoho credentials
 const client_id = '1000.B8FFHCUQ749FL1ZDUXJCMZNOAMYS1Z';
 const client_secret = '4f4bc636cb2b0c57d062275fa9da98c6b6702f6d37';
-const redirect_uri = 'http://localhost:3000/oauth/callback';
+const redirect_uri = 'https://zoho-backend-4.onrender.com/oauth/callback';
 
 // ⛔ Access tokens should ideally be stored securely (DB or encrypted file)
 let access_token = '1000.fb31f106caa1353ad350358313812843.c3f147e9dbfabc4c9a16a0f9615cad7b';
