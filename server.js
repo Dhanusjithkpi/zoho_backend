@@ -134,6 +134,7 @@ app.post('/api/submit-contact', async (req, res) => {
   }
 });
 
+// data geting 
 
 app.get('/api/contact', async (req, res) => {
   try {
@@ -153,72 +154,28 @@ app.get('/api/contact', async (req, res) => {
   }
 });
 
-app.post('/api/test-webhook', async (req, res) => {
-  try {
-    const payload = {
-      FirstName: ' ',
-      LastName: 'Doe',
-      Email: 'john.doe@example.com',
-      Phone: '9876543210' // Optional, but good to add if expected
-    };
-    
-    
-    console.log(payload);
-    console.log('Forwarding payload:', JSON.stringify(payload, null, 2));
-
-
-    const webhookUrl = 'https://development.infithra.com/api/zoho-webhook';
-
-
-    const response = await axios.post(webhookUrl, payload, {
-      headers: { 'Content-Type': 'application/json' }
-    });
-    console.log('Webhook response status:', response.status);
-    console.log('Webhook response data:', response.data);
-    
-
-    // res.status(200).json({ message: 'Forwarded to webhook.site', status: response.status });
-  } catch (err) {
-    console.error('Error forwarding to webhook.site:', err.response?.data || err.message);
-    res.status(500).json({ message: 'Failed to forward to webhook.site', error: err.response?.data || err.message });
-  }
-  
-});
-
-
-app.get('/api/org', async (req, res) => {
-  try {
-    const response = await axios.get('https://www.zohoapis.com/crm/v2/org', {
-      headers: {
-        Authorization: `Zoho-oauthtoken ${access_token}`
-      }
-    });
-    res.json(response.data);
-  } catch (err) {
-    console.error('Org fetch error:', err.response?.data || err.message);
-    res.status(500).send('Error fetching org');
-  }
-});
-
-
-app.get('/api/leads', async (req, res) => {
-  try {
-    const response = await axios.get('https://www.zohoapis.com/crm/v2/Contacts', {
-      headers: {
-        Authorization: `Zoho-oauthtoken ${access_token}`
-      }
-    });
-
-    res.json(response.data);
-  } catch (err) {
-    console.error('Lead fetch error:', err.response?.data || err.message);
-    res.status(500).send('Error fetching leads');
-  }
-});
-
 
 
 // webhook 
+
+app.post('/api/send-to-zoho', async (req, res) => {
+  try {
+    const zohoWebhookUrl = 'https://marketing.zoho.com/api/v1/webhook-url'; // Replace with your actual webhook URL
+    const response = await axios.post(zohoWebhookUrl, req.body, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    res.status(200).json({ message: 'Sent to Zoho Webhook', zohoResponse: response.data });
+  } catch (err) {
+    console.error(err.response?.data || err.message);
+    res.status(500).json({ error: 'Failed to send to Zoho Webhook' });
+  }
+});
+
+
+
 
 
 
