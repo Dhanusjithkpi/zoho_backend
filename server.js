@@ -81,10 +81,10 @@ async function refreshAccessToken() {
 
 
 
-// app.post('/api/submit-contact',async (req, res) => {
-//   console.log('🔔 Zoho Webhook Received:', req.body);
-//   res.status(200).send('✅ Webhook received');
-// });
+app.post('/api/submit-contact',async (req, res) => {
+  console.log('🔔 Zoho Webhook Received:', req.body);
+  res.status(200).send('✅ Webhook received');
+});
 
 // 📥 Submit contact from Angular to Zoho CRM
 app.post('/api/submit-contact', async (req, res) => {
@@ -160,7 +160,7 @@ app.get('/api/contact', async (req, res) => {
 
 app.post('/api/send-to-zoho', async (req, res) => {
   try {
-    const zohoWebhookUrl = 'https://marketing.zoho.com/api/v1/webhook-url'; // Replace with your actual webhook URL
+    const zohoWebhookUrl = 'https://development.infithra.com/api/zoho-webhook '; // Replace with your actual webhook URL
     const response = await axios.post(zohoWebhookUrl, req.body, {
       headers: {
         'Content-Type': 'application/json'
