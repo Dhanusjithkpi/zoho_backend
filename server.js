@@ -12,9 +12,9 @@ const PORT = 3000;
 const client_id = '1000.B8FFHCUQ749FL1ZDUXJCMZNOAMYS1Z';
 const client_secret = '4f4bc636cb2b0c57d062275fa9da98c6b6702f6d37';
 // Live 
-// const redirect_uri = 'https://zoho-backend-4.onrender.com/oauth/callback';
+const redirect_uri = 'https://zoho-backend-ipx6.onrender.com/oauth/callback';
 // local
-const redirect_uri = 'http://localhost:3000/oauth/callback';
+// const redirect_uri = 'http://localhost:3000/oauth/callback';
 
 // Token storage file (optional for persistence)
 const TOKEN_FILE = path.join(__dirname, 'zoho_tokens.json');
