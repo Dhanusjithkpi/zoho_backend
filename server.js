@@ -45,7 +45,9 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); 
 app.use(express.json());
+
 
 // Test route
 app.get('/', (req, res) => {
