@@ -12,9 +12,9 @@ const PORT = 3000;
 const client_id = '1000.B8FFHCUQ749FL1ZDUXJCMZNOAMYS1Z';
 const client_secret = '4f4bc636cb2b0c57d062275fa9da98c6b6702f6d37';
 // Live 
-const redirect_uri = 'https://zoho-backend-ipx6.onrender.com/oauth/callback';
+// const redirect_uri = 'https://zoho-backend-ipx6.onrender.com/oauth/callback';
 // local
-// const redirect_uri = 'http://localhost:3000/oauth/callback';
+const redirect_uri = 'http://localhost:3000/oauth/callback';
 
 // Token storage file (optional for persistence)
 const TOKEN_FILE = path.join(__dirname, 'zoho_tokens.json');
@@ -119,9 +119,11 @@ app.get('/refresh-token', async (req, res) => {
 // API CALL 
 
 app.post('/api/submit-contact', async (req, res) => {
-  const rawContact = req.body.contact?.[0] || {};
+  // const rawContact = req.body.zohopayload?.[0] || {};
 
-  // Normalize casing (optional but safer)
+  const rawContact = req.body.contact || {};
+  console.log(rawContact);
+
   const contact = {
     FirstName: rawContact.Firstname || rawContact.FirstName || '',
     LastName: rawContact.Lastname || rawContact.LastName || 'Not Provided',
@@ -129,6 +131,8 @@ app.post('/api/submit-contact', async (req, res) => {
     Phone: rawContact.Phone || '',
     Company: rawContact.Company || 'Individual',
     Hearaboutus: rawContact.Hearaboutus,
+    PageIdentification: rawContact.PageIdentification,
+    NoofEmployees: rawContact.NoofEmployees,
   };
 
   const zohoData = {
@@ -143,6 +147,8 @@ app.post('/api/submit-contact', async (req, res) => {
         Phone: contact.Phone,
         Company: contact.Company,
         Hear_about_us: contact.Hearaboutus,
+        Page_Identification: contact.PageIdentification,
+        // No_of_Employees: contact.NoofEmployees,
         Lead_Source: 'Website Contact Form',
       }
     ]
@@ -184,9 +190,6 @@ app.post('/api/submit-contact', async (req, res) => {
     return res.status(200).json({
       status: 'success',
       message: 'Contact submitted successfully',
-      leadId,
-      layout: leadData.layout,
-      data: createResponse.data
 
     });
 
