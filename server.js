@@ -51,7 +51,7 @@ app.get('/', (req, res) => {
 // Step 1: Redirect to Zoho for user consent
 app.get('/auth', (req, res) => {
   //  const scope = 'ZohoCRM.modules.leads.ALL';
-  const url = `https://accounts.zoho.com/oauth/v2/auth?scope=AaaServer.profile.Read,ZohoCRM.modules.ALL&client_id=${client_id}&response_type=code&access_type=offline&redirect_uri=${redirect_uri}`;
+  const url = `https://accounts.zoho.com/oauth/v2/auth?scope=AaaServer.profile.Read,ZohoCRM.modules.ALL,ZohoCRM.settings.layouts.ALL&client_id=${client_id}&response_type=code&access_type=offline&redirect_uri=${redirect_uri}`;
   res.redirect(url);
 });
 // Step 2: Handle OAuth callback
@@ -128,16 +128,21 @@ app.post('/api/submit-contact', async (req, res) => {
     Email: rawContact.Email,
     Phone: rawContact.Phone || '',
     Company: rawContact.Company || 'Individual',
+    Hearaboutus: rawContact.Hearaboutus,
   };
 
   const zohoData = {
     data: [
       {
+        "layout": {
+          "id": "6856326000000779001"
+        },
         First_Name: contact.FirstName,
         Last_Name: contact.LastName,
         Email: contact.Email,
         Phone: contact.Phone,
         Company: contact.Company,
+        Hear_about_us: contact.Hearaboutus,
         Lead_Source: 'Website Contact Form',
       }
     ]
@@ -158,12 +163,31 @@ app.post('/api/submit-contact', async (req, res) => {
 
   try {
     // First attempt
-    let response = await submitToZoho();
+    let createResponse = await submitToZoho();
+
+    // const leadId = createResponse.data.data[0].details.id;
+    // console.log('✅ Lead created with ID:', leadId);
+
+    // // Immediately fetch the lead details to get layout info
+    // const getResponse = await axios.get(`https://www.zohoapis.com/crm/v2/Leads/${leadId}`, {
+    //   headers: {
+    //     Authorization: `Zoho-oauthtoken ${access_token}`
+    //   }
+    // });
+
+    // const leadData = getResponse.data.data[0];
+    // console.log('Full lead data:', JSON.stringify(leadData, null, 2));
+
+    // const layoutInfo = leadData.layout || leadData.Layout || leadData.Layouts || leadData.layout_id;
+    // console.log('Extracted layout info:', layoutInfo);
 
     return res.status(200).json({
       status: 'success',
       message: 'Contact submitted successfully',
-      data: response.data
+      leadId,
+      layout: leadData.layout,
+      data: createResponse.data
+
     });
 
   } catch (error) {
@@ -203,25 +227,6 @@ app.post('/api/submit-contact', async (req, res) => {
 });
 
 
-
-// Get organization details (just a test)
-app.get('/api/contact', async (req, res) => {
-  try {
-    const response = await axios.get(`https://www.zohoapis.com/crm/v2/org`, {
-      headers: {
-        Authorization: `Zoho-oauthtoken ${access_token}`
-      }
-    });
-
-    res.json(response.data);
-  } catch (err) {
-    console.error('Get contact error:', err.response?.data || err.message);
-    res.status(err.response?.status || 500).json({
-      error: 'Failed to fetch organization details',
-      details: err.response?.data || err.message
-    });
-  }
-});
 
 // Refresh every 55 minutes (3300000 milliseconds)
 
