@@ -45,7 +45,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); 
+app.options('*', cors(corsOptions));
 app.use(express.json());
 
 
@@ -144,7 +144,7 @@ app.post('/api/submit-contact', async (req, res) => {
         Company: contact.Company,
         Hear_about_us: contact.Hearaboutus,
         Page_Identification: contact.PageIdentification,
-        No_of_Employees: contact.NoofEmployees,
+        Number_of_Employee:contact.NoofEmployees,
         Lead_Source: 'Website Contact Form',
       }
     ]
