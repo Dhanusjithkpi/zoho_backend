@@ -128,8 +128,8 @@ app.post('/api/submit-contact', async (req, res) => {
     Company: rawContact.Company || 'Individual',
     Hearaboutus: rawContact.Hearaboutus,
     PageIdentification: rawContact.PageIdentification,
-    NoofEmployees: rawContact.NoofEmployees,
-    empoly: rawContact.testEmployees,
+    empoly: rawContact.NoofEmployees,
+    // empoly: rawContact.testEmployees,
   };
 
   const zohoData = {
@@ -145,7 +145,7 @@ app.post('/api/submit-contact', async (req, res) => {
         Company: contact.Company,
         Hear_about_us: contact.Hearaboutus,
         Page_Identification: contact.PageIdentification,
-        Number_of_Employees:contact.empoly,
+        Number_of_Employees: contact.empoly,
         Lead_Source: 'Website Contact Form',
       }
     ]
