@@ -39,7 +39,7 @@ loadTokens();
 
 // CORS config — replace with your frontend origin
 const corsOptions = {
-  origin: 'hhttps://development.infithra.com/', // <-- change this to your frontend URL or use '*' to allow all origins
+  origin: 'http://localhost:4200', // <-- change this to your frontend URL or use '*' to allow all origins
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 };
@@ -145,7 +145,7 @@ app.post('/api/submit-contact', async (req, res) => {
         Company: contact.Company,
         Hear_about_us: contact.Hearaboutus,
         Page_Identification: contact.PageIdentification,
-        testt:contact.empoly,
+        Number_of_Employees:contact.empoly,
         Lead_Source: 'Website Contact Form',
       }
     ]
