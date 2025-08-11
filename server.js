@@ -133,6 +133,7 @@ app.post('/api/submit-contact', async (req, res) => {
     Hearaboutus: rawContact.Hearaboutus,
     PageIdentification: rawContact.PageIdentification,
     empoly: rawContact.NoofEmployees,
+    PreviousPageHistory: rawContact.PreviousPageHistory,
     // empoly: rawContact.testEmployees,
   };
 
@@ -150,6 +151,7 @@ app.post('/api/submit-contact', async (req, res) => {
         Hear_about_us: contact.Hearaboutus,
         Page_Identification: contact.PageIdentification,
         Number_of_Employees: contact.empoly,
+        Page_history: contact.PreviousPageHistory,
         Lead_Source: 'Website Contact Form',
       }
     ]
