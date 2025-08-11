@@ -39,7 +39,11 @@ loadTokens();
 
 // CORS config — replace with your frontend origin
 const corsOptions = {
-  origin: 'http://localhost:4200', // <-- change this to your frontend URL or use '*' to allow all origins
+  origin: [
+    'http://localhost:4200',
+    'https://development.infithra.com',
+    'https://another-frontend.com'
+  ], // <-- change this to your frontend URL or use '*' to allow all origins
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 };
