@@ -9,8 +9,8 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Replace with your real Zoho credentials
-const client_id = '1000.B8FFHCUQ749FL1ZDUXJCMZNOAMYS1Z';
-const client_secret = '4f4bc636cb2b0c57d062275fa9da98c6b6702f6d37';
+const client_id = '1000.6LTHFSIR27ZNNY97ZKGCDO02554DDF';
+const client_secret = '62b3b67290767f5fdb04d6f6c6af3fd94eca5d12d1';
 // Live redirect URI for deployed backend
 const redirect_uri = 'https://zoho-backend-ipx6.onrender.com/oauth/callback';
 // Local redirect URI for dev
@@ -120,95 +120,95 @@ app.get('/refresh-token', async (req, res) => {
 });
 
 // API endpoint to submit contact to Zoho
-app.post('/api/submit-contact', async (req, res) => {
-  const rawContact = req.body.contact || {};
-  console.log('Received contact:', rawContact);
+  app.post('/api/submit-contact', async (req, res) => {
+    const rawContact = req.body.contact || {};
+    console.log('Received contact:', rawContact);
 
-  const contact = {
-    FirstName: rawContact.Firstname || rawContact.FirstName || '',
-    LastName: rawContact.Lastname || rawContact.LastName || 'Not Provided',
-    Email: rawContact.Email,
-    Phone: rawContact.Phone || '',
-    Company: rawContact.Company || 'Individual',
-    Hearaboutus: rawContact.Hearaboutus,
-    PageIdentification: rawContact.PageIdentification,
-    empoly: rawContact.NoofEmployees,
-    PreviousPageHistory: rawContact.PreviousPageHistory,
-    // empoly: rawContact.testEmployees,
-  };
+    const contact = {
+      FirstName: rawContact.Firstname || rawContact.FirstName || '',
+      LastName: rawContact.Lastname || rawContact.LastName || 'Not Provided',
+      Email: rawContact.Email,
+      Phone: rawContact.Phone || '',
+      Company: rawContact.Company || 'Individual',
+      Hearaboutus: rawContact.Hearaboutus,
+      PageIdentification: rawContact.PageIdentification,
+      empoly: rawContact.NoofEmployees,
+      folowup: rawContact.Followup,
+      // empoly: rawContact.testEmployees,
+    };
 
-  const zohoData = {
-    data: [
-      {
-        layout: {
-          id: "6856326000000779001"
-        },
-        First_Name: contact.FirstName,
-        Last_Name: contact.LastName,
-        Email: contact.Email,
-        Phone: contact.Phone,
-        Company: contact.Company,
-        Hear_about_us: contact.Hearaboutus,
-        Page_Identification: contact.PageIdentification,
-        Number_of_Employees: contact.empoly,
-        Page_history: contact.PreviousPageHistory,
-        Lead_Source: 'Website Contact Form',
-      }
-    ]
-  };
+    const zohoData = {
+      data: [
+        {
+          layout: {
+            id: "6856326000000779001"
+          },
+          First_Name: contact.FirstName,
+          Last_Name: contact.LastName,
+          Email: contact.Email,
+          Phone: contact.Phone,
+          Company: contact.Company,
+          Hear_about_us: contact.Hearaboutus,
+          Page_Identification: contact.PageIdentification,
+          Number_of_Employees: contact.empoly,
+          Email_Opt_Out:contact.folowup,
+          Lead_Source: 'Website Contact Form',
+        }
+      ]
+    };
 
-  async function submitToZoho() {
-    console.log('Submitting to Zoho:', zohoData);
+    async function submitToZoho() {
+      console.log('Submitting to Zoho:', zohoData);
 
-    return await axios.post('https://www.zohoapis.com/crm/v2/Leads', zohoData, {
-      headers: {
-        Authorization: `Zoho-oauthtoken ${access_token}`,
-        'Content-Type': 'application/json'
-      }
-    });
-  }
-
-  try {
-    const createResponse = await submitToZoho();
-
-    return res.status(200).json({
-      status: 'success',
-      message: 'Contact submitted successfully',
-      data: createResponse.data
-    });
-
-  } catch (error) {
-    console.error('🚨 Submit attempt failed:', error.response?.status);
-
-    if (error.response?.status === 401 && refresh_token) {
-      console.log('🔄 Attempting token refresh...');
-      await refreshAccessToken();
-
-      try {
-        const retryResponse = await submitToZoho();
-
-        return res.status(200).json({
-          status: 'success',
-          message: 'Contact submitted successfully after token refresh',
-          data: retryResponse.data
-        });
-      } catch (retryError) {
-        console.error('❌ Retry also failed:', retryError.response?.data || retryError.message);
-        return res.status(500).json({
-          status: 'error',
-          message: 'Retry after token refresh failed',
-          error: retryError.response?.data || retryError.message
-        });
-      }
+      return await axios.post('https://www.zohoapis.com/crm/v2/Leads', zohoData, {
+        headers: {
+          Authorization: `Zoho-oauthtoken ${access_token}`,
+          'Content-Type': 'application/json'
+        }
+      });
     }
 
-    return res.status(500).json({
-      status: 'error',
-      message: 'Failed to submit contact to Zoho',
-      error: error.response?.data || error.message
-    });
-  }
-});
+    try {
+      const createResponse = await submitToZoho();
+
+      return res.status(200).json({
+        status: 'success',
+        message: 'Contact submitted successfully',
+        data: createResponse.data
+      });
+
+    } catch (error) {
+      console.error('🚨 Submit attempt failed:', error.response?.status);
+
+      if (error.response?.status === 401 && refresh_token) {
+        console.log('🔄 Attempting token refresh...');
+        await refreshAccessToken();
+
+        try {
+          const retryResponse = await submitToZoho();
+
+          return res.status(200).json({
+            status: 'success',
+            message: 'Contact submitted successfully after token refresh',
+            data: retryResponse.data
+          });
+        } catch (retryError) {
+          console.error('❌ Retry also failed:', retryError.response?.data || retryError.message);
+          return res.status(500).json({
+            status: 'error',
+            message: 'Retry after token refresh failed',
+            error: retryError.response?.data || retryError.message
+          });
+        }
+      }
+
+      return res.status(500).json({
+        status: 'error',
+        message: 'Failed to submit contact to Zoho',
+        error: error.response?.data || error.message
+      });
+    }
+  });
 
 // Refresh token every 55 minutes
 setInterval(() => {
