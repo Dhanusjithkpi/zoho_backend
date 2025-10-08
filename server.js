@@ -143,6 +143,9 @@ app.get('/refresh-token', async (req, res) => {
           layout: {
             id: "6856326000000779001"
           },
+          Owner: {
+          id: "6856326000001142271"
+          },
           First_Name: contact.FirstName,
           Last_Name: contact.LastName,
           Email: contact.Email,
